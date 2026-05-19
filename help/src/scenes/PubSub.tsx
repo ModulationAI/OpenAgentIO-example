@@ -14,6 +14,7 @@ const translations = {
     mainAgentSubtitle: "发布者 / 事件源",
     topicSubtitle: "事件主题 / 广播层",
     queueSubtitle: "扇出 / 广播到所有订阅者",
+    queueDescription: "事件复制多份，同时投递给所有Worker",
     workerSubtitle: "订阅者 / 事件处理方",
     steps: [
       "MainAgent 发布事件到主题",
@@ -31,6 +32,7 @@ const translations = {
     mainAgentSubtitle: "Publisher / Event Source",
     topicSubtitle: "Event Topic / Broadcast Layer",
     queueSubtitle: "Fan-out / Broadcast to all subscribers",
+    queueDescription: "Event is replicated and delivered to all Workers simultaneously",
     workerSubtitle: "Subscriber / Event Handler",
     steps: [
       "MainAgent publishes event to topic",
@@ -148,11 +150,15 @@ export default function OpenAgentIOPubSubAnimation() {
   // 获取当前语言的文本
   const t = translations[language];
 
-  // 三个Worker的投递路径，优化曲率更自然
-  const workerPaths = [
-    "M 500 140 C 460 220, 360 260, 270 340", // Worker 1 更平滑的曲线
-    "M 500 140 C 540 220, 460 260, 500 325", // Worker 2 更大弧度的路径，动画效果更突出
-    "M 500 140 C 540 220, 640 260, 730 340"  // Worker 3 更平滑的曲线
+  // 三个Worker的投递路径，根据语言模式动态调整终点位置
+  const workerPaths = language === 'en' ? [
+    "M 500 140 C 460 220, 360 260, 270 325", // Worker 1 英文模式下终点上移
+    "M 500 140 C 540 220, 460 260, 500 310", // Worker 2 英文模式下终点上移
+    "M 500 140 C 540 220, 640 260, 730 325"  // Worker 3 英文模式下终点上移
+  ] : [
+    "M 500 140 C 460 220, 360 260, 270 340", // Worker 1 中文模式
+    "M 500 140 C 540 220, 460 260, 500 325", // Worker 2 中文模式
+    "M 500 140 C 540 220, 640 260, 730 340"  // Worker 3 中文模式
   ];
 
   return (
@@ -226,26 +232,26 @@ export default function OpenAgentIOPubSubAnimation() {
             <div className="text-xl font-bold text-slate-900">agent.events.task</div>
           </motion.div>
 
-          {/* 扇出层 - 缩小并右移 */}
+          {/* 扇出层 - 缩小并右移，英文模式下自动缩小上移 */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="absolute right-10 top-[190px] z-10"
+            className={`absolute right-10 ${language === 'en' ? 'top-[175px]' : 'top-[190px]'} z-10`}
           >
-            <Card className="rounded-2xl border border-cyan-100 bg-gradient-to-r from-cyan-50 to-blue-50 shadow-lg backdrop-blur-xl w-[360px]">
-              <CardContent className="p-3.5 !pt-3.5 flex flex-col items-center">
+            <Card className={`rounded-2xl border border-cyan-100 bg-gradient-to-r from-cyan-50 to-blue-50 shadow-lg backdrop-blur-xl ${language === 'en' ? 'w-[330px]' : 'w-[360px]'}`}>
+              <CardContent className={`${language === 'en' ? 'p-3 !pt-3' : 'p-3.5 !pt-3.5'} flex flex-col items-center`}>
                 <div className="flex items-center gap-2 mb-1">
-                  <Users className="h-5 w-5 text-cyan-700" />
-                  <div className="text-lg font-semibold text-slate-900">Fan-out: 广播到所有订阅者</div>
+                  <Users className={`${language === 'en' ? 'h-4.5 w-4.5' : 'h-5 w-5'} text-cyan-700`} />
+                  <div className={`${language === 'en' ? 'text-base' : 'text-lg'} font-semibold text-slate-900`}>{t.queueSubtitle}</div>
                 </div>
-                <div className="text-sm text-slate-600">事件复制多份，同时投递给所有Worker</div>
+                <div className={`${language === 'en' ? 'text-xs' : 'text-sm'} text-slate-600`}>{t.queueDescription}</div>
               </CardContent>
             </Card>
           </motion.div>
 
-          {/* 底部Worker节点 - 大幅上移彻底避免和STEP卡片重叠 */}
-          <div className="absolute bottom-28 left-1/2 -translate-x-1/2 flex gap-20 z-10">
+          {/* 底部Worker节点 - 根据语言模式动态上移，避免被STEP卡片遮挡 */}
+          <div className={`absolute ${language === 'en' ? 'bottom-32' : 'bottom-28'} left-1/2 -translate-x-1/2 flex gap-20 z-10`}>
             <WorkerCard title="Worker-1" index={0} playing={playing} delay={1.4} />
             <WorkerCard title="Worker-2" index={1} playing={playing} delay={1.4} />
             <WorkerCard title="Worker-N" index={2} playing={playing} delay={1.4} />
