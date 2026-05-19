@@ -7,33 +7,33 @@ import { Card, CardContent } from "@/components/ui/card";
 // 国际化语言包
 const translations = {
   zh: {
-    scenario: "场景1：Request-Reply 基础同步调用",
+    scenario: "场景2：Streaming 流式输出调用",
     pause: "暂停",
     play: "播放",
     replay: "重放",
     mainAgentSubtitle: "调用方 / 路由入口",
-    subAgentSubtitle: "被调用方 / 能力 Agent",
+    subAgentSubtitle: "被调用方 / 流能力 Agent",
     steps: [
       "MainAgent 构造 A2A Protocol",
-      "通过 OpenAgentIO invoke 发送请求",
-      "SubAgent(Echo) 处理请求",
-      "SubAgent 返回响应 A2A Protocol",
-      "MainAgent 收到同步结果",
+      "通过 OpenAgentIO stream_invoke 发送请求",
+      "SubAgent(Stream) 处理请求并流式返回",
+      "连续多个 delta 数据包依次返回",
+      "MainAgent 接收完整流式结果",
     ]
   },
   en: {
-    scenario: "Scenario 1: Request-Reply Basic Synchronous Call",
+    scenario: "Scenario 2: Streaming Output Call",
     pause: "Pause",
     play: "Play",
     replay: "Replay",
     mainAgentSubtitle: "Caller / Routing Entry",
-    subAgentSubtitle: "Callee / Capability Agent",
+    subAgentSubtitle: "Callee / Stream Capability Agent",
     steps: [
       "MainAgent constructs A2A Protocol",
-      "Sends request via OpenAgentIO invoke",
-      "SubAgent(Echo) processes request",
-      "SubAgent returns response A2A Protocol",
-      "MainAgent receives synchronous result",
+      "Sends request via OpenAgentIO stream_invoke",
+      "SubAgent(Stream) processes and streams response",
+      "Multiple delta packets return sequentially",
+      "MainAgent receives complete stream result",
     ]
   }
 } as const;
@@ -63,10 +63,13 @@ function AgentCard({ title, subtitle, icon: Icon, side }: { title: string; subti
   );
 }
 
-function MovingA2AProt({ playing, reverse = false, delay = 0 }: { playing: boolean; reverse?: boolean; delay?: number }) {
+function MovingA2AProt({ playing, reverse = false, delay = 0, isDelta = false }: { playing: boolean; reverse?: boolean; delay?: number; isDelta?: boolean }) {
   const path = reverse ? "M 760 210 C 620 340, 380 340, 240 210" : "M 240 170 C 380 40, 620 40, 760 170";
-  const dotClass = reverse ? "text-sky-500" : "text-cyan-500";
-  const labelClass = reverse ? "text-sky-700" : "text-cyan-700";
+  const dotClass = reverse ? "text-emerald-500" : "text-cyan-500";
+  const labelClass = reverse ? "text-emerald-700" : "text-cyan-700";
+  const dotSize = isDelta ? "6" : "10";
+  const fontSize = isDelta ? "11" : "13";
+  const label = isDelta ? "delta" : "A2A Prot";
 
   return (
     <motion.g
@@ -75,32 +78,32 @@ function MovingA2AProt({ playing, reverse = false, delay = 0 }: { playing: boole
       transition={{ delay }}
     >
       <motion.circle
-        r="10"
+        r={dotSize}
         fill="currentColor"
         className={dotClass}
         style={{
           offsetPath: `path('${path}')`,
           offsetRotate: "0deg",
-          filter: "drop-shadow(0 0 14px rgba(34, 211, 238, 0.55))",
+          filter: isDelta ? "drop-shadow(0 0 8px rgba(16, 185, 129, 0.5))" : "drop-shadow(0 0 14px rgba(34, 211, 238, 0.55))",
         }}
         animate={playing ? { offsetDistance: ["0%", "100%"] } : { offsetDistance: reverse ? "100%" : "0%" }}
-        transition={playing ? { duration: 2.4, repeat: Infinity, ease: "easeInOut", delay } : { duration: 0 }}
+        transition={playing ? { duration: isDelta ? 1.8 : 2.4, repeat: Infinity, ease: "easeInOut", delay } : { duration: 0 }}
       />
       <motion.text
-        fontSize="13"
+        fontSize={fontSize}
         fill="currentColor"
         className={`${labelClass} font-semibold`}
-        style={{ offsetPath: `path('${path}')`, offsetRotate: "0deg", transform: "translate(14px, -12px)" }}
+        style={{ offsetPath: `path('${path}')`, offsetRotate: "0deg", transform: isDelta ? "translate(10px, -8px)" : "translate(14px, -12px)" }}
         animate={playing ? { offsetDistance: ["0%", "100%"] } : { offsetDistance: reverse ? "100%" : "0%" }}
-        transition={playing ? { duration: 2.4, repeat: Infinity, ease: "easeInOut", delay } : { duration: 0 }}
+        transition={playing ? { duration: isDelta ? 1.8 : 2.4, repeat: Infinity, ease: "easeInOut", delay } : { duration: 0 }}
       >
-        A2A Prot
+        {label}
       </motion.text>
     </motion.g>
   );
 }
 
-export default function OpenAgentIORequestReplyAnimation() {
+export default function OpenAgentIOStreamingAnimation() {
   const [playing, setPlaying] = useState(true);
   const [key, setKey] = useState(0);
   const [language, setLanguage] = useState<'zh' | 'en'>('zh');
@@ -165,11 +168,11 @@ export default function OpenAgentIORequestReplyAnimation() {
           key={key}
         >
           <div className="absolute -left-20 top-16 h-72 w-72 rounded-full bg-cyan-200/20 blur-3xl" />
-          <div className="absolute -right-20 top-20 h-72 w-72 rounded-full bg-blue-200/20 blur-3xl" />
+          <div className="absolute -right-20 top-20 h-72 w-72 rounded-full bg-emerald-200/20 blur-3xl" />
           <div className="absolute bottom-10 left-1/2 h-56 w-96 -translate-x-1/2 rounded-full bg-teal-100/30 blur-3xl" />
 
           <AgentCard side="left" title="MainAgent" subtitle={t.mainAgentSubtitle} icon={MessageSquare} />
-          <AgentCard side="right" title="SubAgent(Echo)" subtitle={t.subAgentSubtitle} icon={Server} />
+          <AgentCard side="right" title="SubAgent(Stream)" subtitle={t.subAgentSubtitle} icon={Server} />
 
 
           <svg className="absolute inset-0 h-full w-full z-[15]" viewBox="0 0 1000 520">
@@ -179,10 +182,10 @@ export default function OpenAgentIORequestReplyAnimation() {
                 <stop offset="55%" stopColor="#38bdf8" />
                 <stop offset="100%" stopColor="#2563eb" />
               </linearGradient>
-              <linearGradient id="responseGradient" x1="1" y1="0" x2="0" y2="0">
-                <stop offset="0%" stopColor="#0ea5e9" />
-                <stop offset="55%" stopColor="#2dd4bf" />
-                <stop offset="100%" stopColor="#14b8a6" />
+              <linearGradient id="streamGradient" x1="1" y1="0" x2="0" y2="0">
+                <stop offset="0%" stopColor="#10b981" />
+                <stop offset="55%" stopColor="#34d399" />
+                <stop offset="100%" stopColor="#059669" />
               </linearGradient>
               <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
                 <feGaussianBlur stdDeviation="5" result="coloredBlur" />
@@ -194,8 +197,8 @@ export default function OpenAgentIORequestReplyAnimation() {
               <marker id="arrowRequest" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
                 <path d="M0,0 L0,6 L9,3 z" fill="#2563eb" />
               </marker>
-              <marker id="arrowResponse" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
-                <path d="M0,0 L0,6 L9,3 z" fill="#14b8a6" />
+              <marker id="arrowStream" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+                <path d="M0,0 L0,6 L9,3 z" fill="#059669" />
               </marker>
             </defs>
 
@@ -214,21 +217,27 @@ export default function OpenAgentIORequestReplyAnimation() {
             <motion.path
               d="M 760 210 C 620 340, 380 340, 240 210"
               fill="none"
-              stroke="url(#responseGradient)"
+              stroke="url(#streamGradient)"
               strokeWidth="3.5"
               strokeLinecap="round"
               strokeDasharray="9 10"
-              markerEnd="url(#arrowResponse)"
+              markerEnd="url(#arrowStream)"
               filter="url(#softGlow)"
               animate={playing ? { pathLength: [0.2, 1, 0.2] } : { pathLength: 1 }}
-              transition={playing ? { duration: 2.4, repeat: Infinity, ease: "easeInOut", delay: 1.2 } : { duration: 0 }}
+              transition={playing ? { duration: 1.8, repeat: Infinity, ease: "easeInOut", delay: 2.0 } : { duration: 0 }}
             />
 
-            <text x="420" y="62" fontSize="18" fontWeight="700" fill="#0891b2" textAnchor="middle">invoke(request)</text>
-            <text x="495" y="344" fontSize="18" fontWeight="700" fill="#0f766e" textAnchor="middle">return(response)</text>
+            <text x="420" y="62" fontSize="18" fontWeight="700" fill="#0891b2" textAnchor="middle">stream_invoke(request)</text>
+            <text x="495" y="344" fontSize="18" fontWeight="700" fill="#047857" textAnchor="middle">stream(delta...)</text>
 
+            {/* 请求数据包 */}
             <MovingA2AProt playing={playing} delay={0} />
-            <MovingA2AProt playing={playing} reverse delay={1.2} />
+
+            {/* 流式delta数据包，多个依次返回 */}
+            <MovingA2AProt playing={playing} reverse delay={2.0} isDelta />
+            <MovingA2AProt playing={playing} reverse delay={2.4} isDelta />
+            <MovingA2AProt playing={playing} reverse delay={2.8} isDelta />
+            <MovingA2AProt playing={playing} reverse delay={3.2} isDelta />
           </svg>
 
           <div className="absolute bottom-6 left-8 right-8 grid grid-cols-5 gap-3 z-10">
@@ -241,7 +250,7 @@ export default function OpenAgentIORequestReplyAnimation() {
                   { y: 0, opacity: 0.9, scale: 1 }
                 }
                 transition={playing ?
-                  { duration: 2.4, repeat: Infinity, delay: 0.4 + index * 0.35, ease: "easeInOut" } :
+                  { duration: 2.4, repeat: Infinity, delay: 0.4 + index * 0.4, ease: "easeInOut" } :
                   { duration: 0.5, delay: 0.4 + index * 0.1 }
                 }
                 className="rounded-2xl border border-cyan-100 bg-white/75 p-3 text-sm shadow-[0_12px_40px_rgba(14,165,233,0.1)] backdrop-blur transition-all duration-200 hover:shadow-[0_16px_50px_rgba(14,165,233,0.15)] hover:-translate-y-1"
