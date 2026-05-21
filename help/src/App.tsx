@@ -3,11 +3,13 @@ import RequestReply from './scenes/RequestReply'
 import Streaming from './scenes/Streaming'
 import PubSub from './scenes/PubSub'
 import ParallelExecution from './scenes/ParallelExecution'
+import AgentHandoff from './scenes/AgentHandoff'
+import AsyncTask from './scenes/AsyncTask'
 import { Button } from '@/components/ui/button'
 import { Layers } from 'lucide-react'
 import './App.css'
 
-type Scene = 'request-reply' | 'streaming' | 'pubsub' | 'parallel'
+type Scene = 'request-reply' | 'streaming' | 'pubsub' | 'parallel' | 'handoff' | 'async-task'
 
 function App() {
   const [currentScene, setCurrentScene] = useState<Scene>('request-reply')
@@ -19,6 +21,8 @@ function App() {
       {currentScene === 'streaming' && <Streaming />}
       {currentScene === 'pubsub' && <PubSub />}
       {currentScene === 'parallel' && <ParallelExecution />}
+      {currentScene === 'handoff' && <AgentHandoff />}
+      {currentScene === 'async-task' && <AsyncTask />}
 
       {/* 场景切换栏 - 放在大卡片下方 */}
       <div className="max-w-6xl mx-auto mt-4 flex justify-center">
@@ -54,6 +58,20 @@ function App() {
             className="rounded-xl text-sm"
           >
             Parallel
+          </Button>
+          <Button
+            variant={currentScene === 'handoff' ? 'default' : 'ghost'}
+            onClick={() => setCurrentScene('handoff')}
+            className="rounded-xl text-sm"
+          >
+            Handoff
+          </Button>
+          <Button
+            variant={currentScene === 'async-task' ? 'default' : 'ghost'}
+            onClick={() => setCurrentScene('async-task')}
+            className="rounded-xl text-sm"
+          >
+            Async Task
           </Button>
         </div>
       </div>
