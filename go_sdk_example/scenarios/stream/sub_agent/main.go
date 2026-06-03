@@ -66,7 +66,7 @@ func main() {
 		fmt.Printf("[SubAgent] generating stream response for content=%q\n", req.Content)
 
 		// Simulate LLM: Started → Delta tokens → Final.
-		if err := w.Started(map[string]any{"model": "fake-llm-v1", "prompt": req.Content}); err != nil {
+		if err := w.Started(event.StartedPayload{Meta: map[string]any{"model": "fake-llm-v1", "prompt": req.Content}}); err != nil {
 			return err
 		}
 
@@ -77,16 +77,16 @@ func main() {
 				return ctx.Err()
 			default:
 			}
-			if err := w.Delta(map[string]string{"token": tok + " "}); err != nil {
+			if err := w.Delta(event.DeltaPayload{Delta: tok + " "}); err != nil {
 				return err
 			}
 			time.Sleep(50 * time.Millisecond)
 		}
 
-		return w.Final(map[string]any{
+		return w.Final(event.FinalPayload{Result: map[string]any{
 			"text":  strings.Join(tokens, " ") + " ",
 			"usage": map[string]int{"tokens": len(tokens)},
-		})
+		}})
 	}); err != nil {
 		fmt.Fprintf(os.Stderr, "register stream handler: %v\n", err)
 		os.Exit(1)
