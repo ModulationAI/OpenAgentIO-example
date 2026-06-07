@@ -28,7 +28,8 @@ Most examples use NATS to demonstrate distributed Agent communication. OpenAgent
 ### On your local machine
 ```
 docker run -d \
-  --name nats-js \                                                                               -p 4222:4222 \
+  --name nats-js \ 
+  -p 4222:4222 \
   -p 8222:8222 \
   -v nats-data:/data \
   nats:latest \
@@ -73,7 +74,7 @@ OpenAgentIO supports two transport modes:
 - **NATS**: use this when Agents run as separate processes or on different machines. Most examples in this repository use this mode.
 - **InMem**: use this when all Agents run inside one process. This is useful for local demos, tests, and zero-dependency examples.
 
-Switching transport is just a matter of changing the transport passed to `bus.New`.
+Switching transport is just a matter of changing the transport passed to `bus.New` / `Bus.new`.
 
 NATS:
 
@@ -84,17 +85,31 @@ driver, _ := transportdial.Dial(ctx, transportdial.WithNATSName("my-agent"))
 b, _ := bus.New(bus.WithAgentID("my-agent"), bus.WithTransport(driver))
 ```
 
+```python
+from openagentio import Bus, WithAgentID, WithNATSName, WithTransport, dial
+
+driver = await dial(WithNATSName("my-agent"))
+b = Bus.new(WithAgentID("my-agent"), WithTransport(driver))
+```
+
 InMem:
 
 ```go
-
 import "github.com/ModulationAI/openagentio/pkg/transport/inmem"
 
 driver := inmem.New()
 b, _ := bus.New(bus.WithAgentID("my-agent"), bus.WithTransport(driver))
 ```
 
-See `go_sdk_example/scenarios/orchestrator/main.go` for a single-process InMem example.
+```python
+from openagentio import Bus, InMemoryDriver, WithAgentID, WithTransport
+
+driver = InMemoryDriver()
+b = Bus.new(WithAgentID("my-agent"), WithTransport(driver))
+await b.connect()
+```
+
+Use InMem for single-process examples where all Agents share the same driver instance.
 
 ## Request/Reply Pattern
 
