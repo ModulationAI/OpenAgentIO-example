@@ -20,6 +20,7 @@ Most examples use NATS to demonstrate distributed Agent communication. OpenAgent
 - [Async Task Pattern](#async-task-pattern)
 - [Function Calling Pattern](#function-calling-pattern)
 - [HTTP/SSE Chat Pattern](#httpsse-chat-pattern)
+- [OpenTelemetry Distributed Tracing Pattern](#opentelemetry-distributed-tracing-pattern)
 - [More Examples](#more-examples)
 
 </details>
@@ -582,6 +583,97 @@ Use this pattern when a frontend application needs to call Agents over HTTP and 
 - Streaming generated content to a web page
 
 You can think of this pattern as a chat-friendly bridge between web applications and Agent workflows. The Go server exposes OpenAgentIO over HTTP/SSE, and the TypeScript client turns streamed Agent events into a live browser experience.
+
+## OpenTelemetry Distributed Tracing Pattern
+
+This scenario shows distributed tracing across Agents using OpenTelemetry and Jaeger. It demonstrates how trace context propagates through the `envelope.traceparent` field so that a multi-hop Agent call appears as a single trace.
+
+### How to Run
+
+Start Jaeger (and make sure your local NATS server is running on `localhost:4222`):
+
+```bash
+cd go_sdk_example
+docker compose -f scenarios/otel_tracing/docker-compose.yml up -d
+```
+
+Terminal 1:
+
+```bash
+go run ./scenarios/otel_tracing/backend
+```
+
+Terminal 2:
+
+```bash
+go run ./scenarios/otel_tracing/gateway
+```
+
+Terminal 3:
+
+```bash
+go run ./scenarios/otel_tracing/client
+```
+
+The client prints a TraceID. Open http://localhost:16686, paste the TraceID, and click **Find Traces** to see the full call chain.
+
+### Example Request
+
+```go
+CalcRequest{A: 14, B: 3, Op: "add"}
+```
+
+### Flow
+
+```text
+otel-client
+  -> Start root span "client.calc-request"
+  -> Invoke("gateway-agent", calcRequest)
+
+ gateway-agent
+  -> otel.Trace() extracts upstream SpanContext from envelope.Traceparent
+  -> acp.handle.agent.message.received
+  -> Start "gateway.delegate" span
+  -> Invoke("backend-agent", calcRequest)
+
+ backend-agent
+  -> acp.handle.agent.message.received
+  -> Start "backend.calculate" span
+  -> Returns CalcResponse{Result: 17}
+
+ gateway-agent
+  -> Returns response to client
+
+otel-client
+  -> Prints result=17 handled_by=gateway-agent -> backend-agent
+```
+
+The resulting trace in Jaeger shows three services linked by one TraceID:
+
+| Service | Span |
+|---------|------|
+| `otel-client` | `client.calc-request` |
+| `gateway-agent` | `acp.handle.agent.message.received` -> `gateway.delegate` |
+| `backend-agent` | `acp.handle.agent.message.received` -> `backend.calculate` |
+
+![OTel Tracing in Jaeger](./assets/otel.png)
+
+### Key Integration Points
+
+- **`otel.Trace()` middleware** (gateway/backend): extracts the upstream span from `envelope.Traceparent` and creates a Consumer span around the handler.
+- **`otel.EnvelopePreparer()`** (all three): injects the active span into every outbound envelope so trace context crosses process boundaries.
+- **Manual spans**: gateway and backend create explicit `gateway.delegate` and `backend.calculate` spans around their business logic.
+- **Error recording**: when a handler returns an error, `otel.Trace()` automatically calls `span.RecordError(err)` and sets the span status to `Error`.
+
+### When to Use It
+
+Use this pattern when you need observability across a chain of Agents, for example:
+
+- Debug latency in multi-hop Agent orchestration
+- Correlate logs and traces across services using `TraceID`
+- Monitor error rates per Agent target in production
+
+You can think of this pattern as turning your Agent mesh into an observable distributed system. Each Agent is a separate service in Jaeger, and every envelope carries enough context to keep the full call chain linked.
 
 ## More Examples
 
