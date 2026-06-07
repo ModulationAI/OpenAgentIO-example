@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OpenAgentIO SSE Chat</title>
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="chat">
+        <header class="chat-header">
+          <div>
+            <p class="eyebrow">OpenAgentIO TypeScript Client</p>
+            <h1>SSE Chat Demo</h1>
+          </div>
+          <span class="status">HTTP/SSE</span>
+        </header>
+
+        <div id="chat-log" class="chat-log" aria-live="polite"></div>
+
+        <form id="chat-form" class="composer">
+          <input
+            id="message-input"
+            name="message"
+            type="text"
+            autocomplete="off"
+            value="How does OpenAgentIO streaming work?"
+            aria-label="Message"
+          />
+          <button id="send-button" type="submit">Send</button>
+        </form>
+      </section>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

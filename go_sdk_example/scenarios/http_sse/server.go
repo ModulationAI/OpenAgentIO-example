@@ -2,21 +2,17 @@
 
 package main
 
-// server starts an OpenAgentIO Bus + HTTP/SSE adapter so external clients can
-// drive agents over REST and SSE. Two handlers are registered:
+// server starts an OpenAgentIO Bus with the HTTP/SSE adapter enabled.
+// It is mainly used by the browser chat demo in ts_sdk_example/scenarios/sse_client.
+// Three targets are registered:
 //
-//   - echo  : POST /v1/agents/echo/invoke   returns the request payload as-is.
-//   - count : POST /v1/agents/count/stream  emits started + N deltas + final.
+//   - echo      : POST /v1/agents/echo/invoke      returns the request payload as-is.
+//   - count     : POST /v1/agents/count/stream     emits started + N deltas + final.
+//   - assistant : POST /v1/agents/assistant/stream emits text deltas for a chat UI.
 //
-// Start the server:  go run -tags=server .
+// Start the server:
 //
-// curl -sS -X POST localhost:8080/v1/agents/echo/invoke \
-//      -H 'Content-Type: application/json' \
-//      -d '{"msg":"hi"}'
-//
-// curl -sN -X POST localhost:8080/v1/agents/count/stream \
-//      -H 'Content-Type: application/json' \
-//      -d '{"n":3}'
+//	go run -tags=server .
 
 import (
 	"context"
@@ -26,6 +22,7 @@ import (
 	nethttp "net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 
@@ -55,7 +52,7 @@ func main() {
 	}
 	defer b.Close()
 
-	// Echo handler — synchronous invoke returns payload as-is.
+	// Echo returns the request payload as-is.
 	if err := b.HandleInvoke("echo", func(_ context.Context, e *event.Envelope) (any, error) {
 		logger.Info("echo invoked", "payload", string(e.Payload))
 		return json.RawMessage(e.Payload), nil
@@ -64,10 +61,11 @@ func main() {
 		os.Exit(1)
 	}
 
-	// Count handler — streaming with started/delta/final frames.
+	// Count streams structured frames for low-level SSE checks.
 	if err := b.HandleStream("count", func(ctx context.Context, e *event.Envelope, w bus.StreamWriter) error {
 		var args struct {
-			N int `json:"n"`
+			N       int `json:"n"`
+			DelayMS int `json:"delay_ms"`
 		}
 		if len(e.Payload) > 0 {
 			_ = json.Unmarshal(e.Payload, &args)
@@ -75,15 +73,23 @@ func main() {
 		if args.N <= 0 {
 			args.N = 5
 		}
-		if err := w.Started(event.StartedPayload{Meta: map[string]any{"model": "demo-llm", "n": args.N}}); err != nil {
+		if args.DelayMS <= 0 {
+			args.DelayMS = 600
+		}
+		if err := w.Started(event.StartedPayload{Meta: map[string]any{
+			"model":    "demo-llm",
+			"n":        args.N,
+			"delay_ms": args.DelayMS,
+		}}); err != nil {
 			return err
 		}
+		delay := time.Duration(args.DelayMS) * time.Millisecond
 		for i := 0; i < args.N; i++ {
 			if err := w.Delta(event.DeltaPayload{Data: map[string]any{"i": i}}); err != nil {
 				return err
 			}
 			select {
-			case <-time.After(150 * time.Millisecond):
+			case <-time.After(delay):
 			case <-ctx.Done():
 				return ctx.Err()
 			}
@@ -91,6 +97,53 @@ func main() {
 		return w.Final(event.FinalPayload{Result: map[string]any{"total": args.N}})
 	}); err != nil {
 		fmt.Fprintf(os.Stderr, "register count: %v\n", err)
+		os.Exit(1)
+	}
+
+	// Assistant streams text chunks for the browser chat demo.
+	if err := b.HandleStream("assistant", func(ctx context.Context, e *event.Envelope, w bus.StreamWriter) error {
+		var args struct {
+			Message string `json:"message"`
+			DelayMS int    `json:"delay_ms"`
+		}
+		if len(e.Payload) > 0 {
+			_ = json.Unmarshal(e.Payload, &args)
+		}
+		if strings.TrimSpace(args.Message) == "" {
+			args.Message = "How does OpenAgentIO streaming work?"
+		}
+		if args.DelayMS <= 0 {
+			args.DelayMS = 140
+		}
+
+		reply := fmt.Sprintf(
+			"OpenAgentIO streams this reply over Server-Sent Events. Your message was: %q. Each chunk arrives as an agent.response.delta frame, so the browser can render the answer as it is generated.",
+			args.Message,
+		)
+		chunks := chunkWords(reply, 3)
+
+		if err := w.Started(event.StartedPayload{Meta: map[string]any{
+			"agent":    "assistant",
+			"delay_ms": args.DelayMS,
+		}}); err != nil {
+			return err
+		}
+
+		delay := time.Duration(args.DelayMS) * time.Millisecond
+		for _, chunk := range chunks {
+			if err := w.Delta(event.DeltaPayload{Delta: chunk}); err != nil {
+				return err
+			}
+			select {
+			case <-time.After(delay):
+			case <-ctx.Done():
+				return ctx.Err()
+			}
+		}
+
+		return w.Final(event.FinalPayload{Result: map[string]any{"text": reply}})
+	}); err != nil {
+		fmt.Fprintf(os.Stderr, "register assistant: %v\n", err)
 		os.Exit(1)
 	}
 
@@ -132,4 +185,28 @@ func main() {
 		os.Exit(1)
 	}
 	<-idleConnsClosed
+}
+
+func chunkWords(text string, size int) []string {
+	words := strings.Fields(text)
+	if len(words) == 0 {
+		return nil
+	}
+	if size <= 0 {
+		size = 1
+	}
+
+	chunks := make([]string, 0, (len(words)+size-1)/size)
+	for i := 0; i < len(words); i += size {
+		end := i + size
+		if end > len(words) {
+			end = len(words)
+		}
+		chunk := strings.Join(words[i:end], " ")
+		if end < len(words) {
+			chunk += " "
+		}
+		chunks = append(chunks, chunk)
+	}
+	return chunks
 }

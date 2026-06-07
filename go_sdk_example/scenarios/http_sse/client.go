@@ -2,8 +2,9 @@
 
 package main
 
-// client demonstrates how an external REST client interacts with the
-// HTTP/SSE adapter. It runs two demos:
+// client is an optional low-level HTTP/SSE smoke test for the adapter.
+// The recommended browser demo lives in ts_sdk_example/scenarios/sse_client.
+// This command runs two protocol-level checks:
 //
 //   - invokeDemo:  synchronous request-reply (POST /v1/agents/echo/invoke).
 //   - streamDemo:  SSE streaming (POST /v1/agents/count/stream).
@@ -90,10 +91,10 @@ func streamDemo() error {
 	// Parse SSE frames:  event: <type>\nid: <id>\ndata: <json>\n\n
 	scanner := bufio.NewScanner(resp.Body)
 	var (
-		sseEvent  string
-		sseID     string
-		sseData   string
-		frameNum  int
+		sseEvent string
+		sseID    string
+		sseData  string
+		frameNum int
 	)
 
 	for scanner.Scan() {

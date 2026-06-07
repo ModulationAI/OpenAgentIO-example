@@ -58,3 +58,14 @@ func PrintEnvelopeContext(label string, e *event.Envelope) {
 		fmt.Printf("  [%s] Metadata=%v\n", label, e.Metadata)
 	}
 }
+
+// WaitForDemoTransport waits for asynchronous transport operations to reach
+// the broker in short-lived command-line demos. Long-running applications
+// usually do not need this synchronization point.
+func WaitForDemoTransport(tp any) error {
+	flusher, ok := tp.(interface{ Flush() error })
+	if !ok {
+		return nil
+	}
+	return flusher.Flush()
+}
