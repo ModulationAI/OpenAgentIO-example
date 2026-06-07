@@ -1,6 +1,6 @@
 # OpenAgentIO SDK Examples
 
-This directory contains minimal Go/Python/TS SDK examples for OpenAgentIO. Each scenario focuses on one core communication pattern so you can quickly understand how Agents work together.
+This directory contains minimal Go/Python/TS SDK examples for [OpenAgentIO](https://github.com/ModulationAI/openagentio). Each scenario focuses on one core communication pattern so you can quickly understand how Agents work together.
 
 Most examples use NATS to demonstrate distributed Agent communication. OpenAgentIO also supports an in-memory transport for single-process local demos.
 
