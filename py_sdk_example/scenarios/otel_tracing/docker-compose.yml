@@ -1,0 +1,22 @@
+# Infrastructure for the OTel tracing demo.
+#
+# Start:
+#   docker compose -f py_sdk_example/scenarios/otel_tracing/docker-compose.yml up -d
+#
+# Stop:
+#   docker compose -f py_sdk_example/scenarios/otel_tracing/docker-compose.yml down
+#
+# Jaeger UI: http://localhost:16686
+#
+# Note: This only starts Jaeger. You need a local NATS server
+# running on localhost:4222 (same as other scenarios).
+
+services:
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    ports:
+      - "16686:16686"   # Jaeger UI
+      - "4317:4317"     # OTLP gRPC
+      - "4318:4318"     # OTLP HTTP

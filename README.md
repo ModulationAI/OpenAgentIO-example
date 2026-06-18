@@ -590,29 +590,53 @@ This scenario shows distributed tracing across Agents using OpenTelemetry and Ja
 
 ### How to Run
 
-Start Jaeger (and make sure your local NATS server is running on `localhost:4222`):
+Start Jaeger (and make sure your local NATS server is running on `localhost:4222`).
+
+Go:
 
 ```bash
 cd go_sdk_example
 docker compose -f scenarios/otel_tracing/docker-compose.yml up -d
 ```
 
-Terminal 1:
+Python:
 
 ```bash
+docker compose -f py_sdk_example/scenarios/otel_tracing/docker-compose.yml up -d
+```
+
+Install the optional Python OpenTelemetry dependencies if they are not already present:
+
+```bash
+py_sdk_example/.venv/bin/python -m pip install opentelemetry-api opentelemetry-sdk opentelemetry-exporter-otlp-proto-grpc
+```
+
+Start the agents in separate terminals.
+
+Go:
+
+```bash
+# Terminal 1
 go run ./scenarios/otel_tracing/backend
-```
 
-Terminal 2:
-
-```bash
+# Terminal 2
 go run ./scenarios/otel_tracing/gateway
+
+# Terminal 3
+go run ./scenarios/otel_tracing/client
 ```
 
-Terminal 3:
+Python:
 
 ```bash
-go run ./scenarios/otel_tracing/client
+# Terminal 1
+py_sdk_example/.venv/bin/python py_sdk_example/scenarios/otel_tracing/backend/main.py
+
+# Terminal 2
+py_sdk_example/.venv/bin/python py_sdk_example/scenarios/otel_tracing/gateway/main.py
+
+# Terminal 3
+py_sdk_example/.venv/bin/python py_sdk_example/scenarios/otel_tracing/client/main.py
 ```
 
 The client prints a TraceID. Open http://localhost:16686, paste the TraceID, and click **Find Traces** to see the full call chain.
@@ -621,6 +645,10 @@ The client prints a TraceID. Open http://localhost:16686, paste the TraceID, and
 
 ```go
 CalcRequest{A: 14, B: 3, Op: "add"}
+```
+
+```python
+CalcRequest(a=14, b=3, op="add")
 ```
 
 ### Flow
@@ -660,8 +688,8 @@ The resulting trace in Jaeger shows three services linked by one TraceID:
 
 ### Key Integration Points
 
-- **`otel.Trace()` middleware** (gateway/backend): extracts the upstream span from `envelope.Traceparent` and creates a Consumer span around the handler.
-- **`otel.EnvelopePreparer()`** (all three): injects the active span into every outbound envelope so trace context crosses process boundaries.
+- **`otel.Trace()` / `OTelTrace()` middleware** (gateway/backend): extracts the upstream span from `envelope.Traceparent` / `envelope.traceparent` and creates a Consumer span around the handler.
+- **`otel.EnvelopePreparer()` / `OTelEnvelopePreparer()`** (all three): injects the active span into every outbound envelope so trace context crosses process boundaries.
 - **Manual spans**: gateway and backend create explicit `gateway.delegate` and `backend.calculate` spans around their business logic.
 - **Error recording**: when a handler returns an error, `otel.Trace()` automatically calls `span.RecordError(err)` and sets the span status to `Error`.
 
