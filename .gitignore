@@ -16,3 +16,6 @@ venv/
 # Demo runtime
 .env
 *.log
+*.mp4
+*.gif
+.hyperframes
