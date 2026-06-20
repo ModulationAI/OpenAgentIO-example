@@ -1,0 +1,54 @@
+# Infrastructure for the Matrix -> MCP -> SSE demo (Phase 5).
+#
+# Starts NATS, Jaeger, Synapse, and Element Web for the real Matrix bridge flow.
+#
+# Before the first run, generate Synapse configuration and seed users/room:
+#
+#   py_sdk_example/.venv/bin/python \
+#       py_sdk_example/scenarios/matrix_mcp_agent_flow/seed_synapse.py
+#
+# Start:
+#   docker compose -f py_sdk_example/scenarios/matrix_mcp_agent_flow/docker-compose.yml up -d
+#
+# Stop:
+#   docker compose -f py_sdk_example/scenarios/matrix_mcp_agent_flow/docker-compose.yml down
+#
+# URLs:
+#   - Synapse:       http://localhost:8008
+#   - Element Web:   http://localhost:8080
+#   - Jaeger UI:     http://localhost:16686
+#   - NATS:          nats://localhost:4222
+
+services:
+  nats:
+    image: nats:latest
+    ports:
+      - "4222:4222"
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    ports:
+      - "16686:16686"   # Jaeger UI
+      - "4317:4317"     # OTLP gRPC
+      - "4318:4318"     # OTLP HTTP
+
+  synapse:
+    image: matrixdotorg/synapse:latest
+    volumes:
+      - ./synapse-data:/data
+    environment:
+      - SYNAPSE_SERVER_NAME=localhost
+      - SYNAPSE_REPORT_STATS=no
+    ports:
+      - "8008:8008"
+
+  element-web:
+    image: vectorim/element-web:latest
+    volumes:
+      - ./element-web/config.json:/app/config.json:ro
+    ports:
+      - "8080:80"
+    depends_on:
+      - synapse

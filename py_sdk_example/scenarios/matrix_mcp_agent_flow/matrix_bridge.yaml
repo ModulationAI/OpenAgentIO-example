@@ -1,0 +1,19 @@
+version: "openagentio.bridge/v1"
+bridges:
+  - name: "matrix-demo"
+    type: "matrix_event"
+    config:
+      homeserver_url: "${MATRIX_HOMESERVER_URL}"
+      access_token: "${MATRIX_ACCESS_TOKEN}"
+      user_id: "${MATRIX_BOT_USER_ID}"
+      room_ids:
+        - "${MATRIX_ROOM_ID}"
+      sync_timeout: 30
+      reconnect_delay: 2
+      initial_sync_behavior: "skip"
+      outbound_msgtype: "m.text"
+    mappings:
+      event_prefix: "matrix"
+      inbound_message_event: "matrix.message.received"
+      outbound_message_event: "matrix.message.send"
+      session_strategy: "room"
