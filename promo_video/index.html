@@ -6,14 +6,15 @@
   <title>OpenAgentIO Promo</title>
   <style>
     :root {
-      --bg: #101316;
-      --surface: #171d20;
-      --surface-2: #20282b;
-      --fg: #f2f0e8;
-      --muted: #a9b2ad;
-      --accent: #ffb000;
-      --ok: #30d5a2;
-      --line: rgba(242, 240, 232, 0.14);
+      --bg: #0d1117;
+      --surface: #111827;
+      --surface-2: #17212b;
+      --fg: #e6edf3;
+      --muted: #8b949e;
+      --accent: #2ac1c1;
+      --pink: #f25c78;
+      --amber: #ffd23f;
+      --line: rgba(230, 237, 243, 0.14);
     }
 
     * {
@@ -34,9 +35,9 @@
       height: 1080px;
       overflow: hidden;
       background:
-        radial-gradient(circle at 84% 16%, rgba(255, 176, 0, 0.12), transparent 28%),
-        radial-gradient(circle at 18% 84%, rgba(48, 213, 162, 0.10), transparent 30%),
-        linear-gradient(135deg, #101316 0%, #13191b 52%, #0d1113 100%);
+        linear-gradient(115deg, rgba(42, 193, 193, 0.08), transparent 34%),
+        linear-gradient(245deg, rgba(242, 92, 120, 0.06), transparent 38%),
+        linear-gradient(135deg, #0d1117 0%, #0f1720 50%, #080b10 100%);
     }
 
     .grid {
@@ -44,8 +45,9 @@
       inset: 0;
       opacity: 0.32;
       background-image:
-        linear-gradient(rgba(242, 240, 232, 0.045) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(242, 240, 232, 0.045) 1px, transparent 1px);
+        linear-gradient(rgba(42, 193, 193, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(42, 193, 193, 0.07) 1px, transparent 1px),
+        linear-gradient(135deg, transparent 0 48%, rgba(242, 92, 120, 0.06) 49% 51%, transparent 52% 100%);
       background-size: 80px 80px;
       z-index: 0;
     }
@@ -54,7 +56,7 @@
       position: absolute;
       inset: 0;
       pointer-events: none;
-      background: linear-gradient(180deg, transparent, rgba(255, 176, 0, 0.07), transparent);
+      background: linear-gradient(180deg, transparent, rgba(42, 193, 193, 0.12), transparent);
       height: 220px;
       z-index: 1;
       opacity: 0.65;
@@ -113,13 +115,13 @@
     .mark {
       width: 62px;
       height: 62px;
-      border: 1px solid rgba(255, 176, 0, 0.44);
+      border: 1px solid rgba(255, 210, 63, 0.48);
       display: grid;
       place-items: center;
       border-radius: 14px;
-      box-shadow: 0 0 42px rgba(255, 176, 0, 0.18);
+      box-shadow: 0 0 42px rgba(255, 210, 63, 0.22);
       overflow: hidden;
-      background: rgba(255, 176, 0, 0.08);
+      background: rgba(255, 210, 63, 0.08);
     }
 
     .mark img {
@@ -150,7 +152,7 @@
 
     .proof-pill {
       border: 1px solid var(--line);
-      background: rgba(23, 29, 32, 0.74);
+      background: rgba(17, 24, 39, 0.74);
       padding: 18px 24px;
       font-size: 24px;
       color: var(--fg);
@@ -160,7 +162,7 @@
     .cn-subtitle {
       max-width: 1540px;
       margin: 0;
-      color: rgba(242, 240, 232, 0.82);
+      color: rgba(230, 237, 243, 0.82);
       font-family: Inter, Arial, sans-serif;
       font-size: 25px;
       line-height: 1.45;
@@ -172,8 +174,8 @@
       max-width: none;
       margin-top: 2px;
       padding: 18px 24px;
-      border-top: 1px solid rgba(242, 240, 232, 0.10);
-      background: rgba(16, 19, 22, 0.38);
+      border-top: 1px solid rgba(230, 237, 243, 0.10);
+      background: rgba(13, 17, 23, 0.48);
       text-align: center;
       font-size: 25px;
       line-height: 1.4;
@@ -205,7 +207,7 @@
       justify-content: space-between;
       padding: 24px 28px;
       border: 1px solid var(--line);
-      background: rgba(23, 29, 32, 0.72);
+      background: rgba(17, 24, 39, 0.72);
       border-radius: 8px;
       font-size: 28px;
       font-weight: 760;
@@ -220,7 +222,7 @@
     .arrow-lane {
       position: relative;
       height: 10px;
-      background: rgba(242, 240, 232, 0.10);
+      background: rgba(230, 237, 243, 0.10);
       overflow: hidden;
       border-radius: 999px;
     }
@@ -249,8 +251,8 @@
       justify-content: space-between;
       gap: 12px;
       padding: 20px 22px;
-      border: 1px solid rgba(255, 176, 0, 0.22);
-      background: rgba(23, 29, 32, 0.72);
+      border: 1px solid rgba(42, 193, 193, 0.24);
+      background: rgba(17, 24, 39, 0.76);
       border-radius: 8px;
       box-shadow: 0 18px 46px rgba(0, 0, 0, 0.18);
     }
@@ -284,7 +286,7 @@
     .clip-frame {
       position: relative;
       overflow: hidden;
-      border: 1px solid rgba(242, 240, 232, 0.20);
+      border: 1px solid rgba(230, 237, 243, 0.20);
       background: var(--surface);
       border-radius: 10px;
       box-shadow: 0 28px 110px rgba(0, 0, 0, 0.42);
@@ -301,6 +303,32 @@
       object-position: center;
     }
 
+    .media-video {
+      position: absolute;
+      z-index: 3;
+      object-fit: cover;
+      display: block;
+      overflow: hidden;
+      border: 1px solid rgba(230, 237, 243, 0.20);
+      background: var(--surface);
+      border-radius: 10px;
+      box-shadow: 0 28px 110px rgba(0, 0, 0, 0.42);
+    }
+
+    .media-chat {
+      left: 104px;
+      top: 86px;
+      width: 990px;
+      height: 908px;
+    }
+
+    .media-trace {
+      left: 104px;
+      top: 86px;
+      width: 975px;
+      height: 908px;
+    }
+
     .callout-panel {
       display: flex;
       flex-direction: column;
@@ -308,7 +336,7 @@
       gap: 26px;
       padding: 42px;
       border: 1px solid var(--line);
-      background: rgba(16, 19, 22, 0.84);
+      background: rgba(13, 17, 23, 0.86);
       border-radius: 10px;
     }
 
@@ -327,8 +355,8 @@
       height: 16px;
       flex: 0 0 auto;
       border-radius: 50%;
-      background: var(--ok);
-      box-shadow: 0 0 28px rgba(48, 213, 162, 0.55);
+      background: var(--accent);
+      box-shadow: 0 0 28px rgba(42, 193, 193, 0.48);
     }
 
     .chain-scene {
@@ -350,8 +378,8 @@
       justify-content: center;
       gap: 16px;
       padding: 28px;
-      border: 1px solid rgba(242, 240, 232, 0.17);
-      background: linear-gradient(180deg, rgba(32, 40, 43, 0.92), rgba(18, 23, 25, 0.92));
+      border: 1px solid rgba(230, 237, 243, 0.17);
+      background: linear-gradient(180deg, rgba(23, 33, 43, 0.94), rgba(13, 17, 23, 0.94));
       border-radius: 10px;
     }
 
@@ -368,7 +396,7 @@
 
     .chain-line {
       height: 8px;
-      background: rgba(255, 176, 0, 0.18);
+      background: rgba(42, 193, 193, 0.18);
       border-radius: 999px;
       overflow: hidden;
     }
@@ -376,7 +404,7 @@
     .chain-line .runner {
       width: 28%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, var(--accent), var(--ok), transparent);
+      background: linear-gradient(90deg, transparent, var(--accent), var(--pink), var(--amber), transparent);
       transform: translateX(-120%);
     }
 
@@ -389,7 +417,7 @@
     }
 
     .ecosystem-caption {
-      color: rgba(242, 240, 232, 0.54);
+      color: rgba(230, 237, 243, 0.54);
       font-size: 22px;
       line-height: 1.25;
       font-weight: 560;
@@ -411,7 +439,7 @@
       right: 48px;
       top: 28px;
       height: 1px;
-      background: rgba(242, 240, 232, 0.20);
+      background: rgba(230, 237, 243, 0.20);
       z-index: 0;
     }
 
@@ -424,11 +452,11 @@
       justify-content: center;
       min-height: 42px;
       padding: 10px 12px;
-      border: 1px solid rgba(242, 240, 232, 0.16);
+      border: 1px solid rgba(42, 193, 193, 0.18);
       border-radius: 999px;
-      background: rgba(23, 29, 32, 0.92);
+      background: rgba(17, 24, 39, 0.92);
       min-width: 0;
-      color: rgba(242, 240, 232, 0.66);
+      color: rgba(230, 237, 243, 0.68);
       font-size: 17px;
       line-height: 1.12;
       font-weight: 650;
@@ -450,7 +478,7 @@
 
     .metric {
       border: 1px solid var(--line);
-      background: rgba(23, 29, 32, 0.72);
+      background: rgba(17, 24, 39, 0.76);
       border-radius: 8px;
       padding: 26px 30px;
     }
@@ -458,7 +486,7 @@
     .metric .value {
       font-size: 54px;
       font-weight: 850;
-      color: var(--ok);
+      color: var(--accent);
     }
 
     .metric .caption {
@@ -481,11 +509,11 @@
       height: 260px;
       display: grid;
       place-items: center;
-      border: 1px solid rgba(255, 176, 0, 0.46);
+      border: 1px solid rgba(255, 210, 63, 0.46);
       border-radius: 22px;
-      background: rgba(23, 29, 32, 0.56);
+      background: rgba(17, 24, 39, 0.62);
       box-shadow:
-        0 0 70px rgba(255, 176, 0, 0.20),
+        0 0 70px rgba(255, 210, 63, 0.22),
         0 28px 90px rgba(0, 0, 0, 0.34);
       overflow: hidden;
       will-change: transform, box-shadow;
@@ -505,7 +533,7 @@
       line-height: 1;
       font-weight: 860;
       letter-spacing: 0;
-      text-shadow: 0 0 0 rgba(255, 176, 0, 0);
+      text-shadow: 0 0 0 rgba(42, 193, 193, 0);
       will-change: transform, text-shadow, color;
     }
 
@@ -525,7 +553,7 @@
     }
 
     .closing-sdk {
-      color: rgba(242, 240, 232, 0.78);
+      color: rgba(230, 237, 243, 0.78);
       font-size: 28px;
       line-height: 1.2;
       font-weight: 620;
@@ -533,7 +561,7 @@
 
     .closing-vision {
       max-width: 1160px;
-      color: rgba(242, 240, 232, 0.84);
+      color: rgba(230, 237, 243, 0.84);
       font-size: 30px;
       line-height: 1.3;
       font-weight: 560;
@@ -612,7 +640,7 @@
     <section data-hf-id="hf-5bgd" class="scene scene-3 clip-scene">
       <div data-hf-id="hf-klq1" class="clip-layout">
         <div data-hf-id="hf-ee7h" class="clip-frame chat s3-clip">
-          <video data-hf-id="hf-f9c8" data-start="8.06" data-duration="20.44" data-track-index="10" src="assets/matrix_mcp_chat.mp4" muted playsinline preload="metadata"></video>
+          <video data-hf-id="hf-wa37" data-start="8.06" data-duration="20.44" data-track-index="12" src="assets/matrix_mcp_chat.mp4" muted playsinline preload="auto"></video>
         </div>
         <div data-hf-id="hf-pc6c" class="callout-panel s3-panel">
           <div data-hf-id="hf-azqn" class="label">Live demo</div>
@@ -657,7 +685,7 @@
     <section data-hf-id="hf-hy53" class="scene scene-5 clip-scene">
       <div data-hf-id="hf-gu1a" class="trace-layout">
         <div data-hf-id="hf-y32e" class="clip-frame trace-frame s5-clip">
-          <video data-hf-id="hf-mlar" data-start="35.06" data-duration="21.27" data-track-index="11" src="assets/observability.mp4" muted playsinline preload="metadata"></video>
+          <video data-hf-id="hf-jt2v" data-start="35.06" data-duration="21.27" data-track-index="13" src="assets/observability.mp4" muted playsinline preload="auto"></video>
         </div>
         <div data-hf-id="hf-qsp2" class="callout-panel s5-panel">
           <div data-hf-id="hf-zh3x" class="label">Observability proof</div>
@@ -760,15 +788,15 @@
       tl.from(".s6-line", { y: 24, opacity: 0, duration: 0.40, stagger: 0.12, ease: "power3.out" }, 57.72);
       tl.to(".s6-logo", {
         scale: 1.035,
-        boxShadow: "0 0 110px rgba(255, 176, 0, 0.46), 0 28px 90px rgba(0, 0, 0, 0.34)",
+        boxShadow: "0 0 110px rgba(255, 210, 63, 0.46), 0 28px 90px rgba(0, 0, 0, 0.34)",
         duration: 0.28,
         repeat: 3,
         yoyo: true,
         ease: "sine.inOut"
       }, 58.16);
       tl.to(".s6-title", {
-        color: "#ffcf4a",
-        textShadow: "0 0 34px rgba(255, 176, 0, 0.58)",
+        color: "#2ac1c1",
+        textShadow: "0 0 34px rgba(42, 193, 193, 0.58)",
         duration: 0.28,
         repeat: 3,
         yoyo: true,
@@ -778,5 +806,7 @@
       window.__timelines["openagentio-promo"] = tl;
     </script>
   </div>
+  <audio data-hf-id="hf-to1d" data-start="0" data-duration="31.20" data-track-index="20" src="assets/code_with_rhythm_cut.mp3" data-volume="0.42"></audio>
+  <audio data-hf-id="hf-f849" data-start="31.20" data-duration="28.80" data-track-index="20" src="assets/code_with_rhythm_cut.mp3" data-volume="0.42"></audio>
 </body>
 </html>

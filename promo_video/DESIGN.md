@@ -2,16 +2,17 @@
 
 ## Style Prompt
 
-Dark technical launch film for a developer infrastructure project. The video should feel precise, credible, and high-energy without looking like a generic neon AI demo. Real recorded clips carry the proof; typography and motion explain the value: OpenAgentIO connects different agents into one observable workflow.
+Modern-Cyber Net launch film for a developer infrastructure project. The video should feel like a deep runtime network: precise, credible, and high-energy, with real recorded clips carrying the proof. The visual system uses a dark GitHub-like base, cyan as the primary connection signal, pink as a controlled contrast accent, and amber only for logo resonance and communication sparks.
 
 ## Colors
 
-- Background: `#101316` near-black with a slight green tint.
-- Surface: `#171d20` for panels and clip frames.
-- Foreground: `#f2f0e8` warm off-white for primary text.
-- Muted: `#a9b2ad` for labels and secondary copy.
-- Accent: `#ffb000` amber for path highlights and proof points.
-- Secondary accent: `#30d5a2` green for successful trace/session signals.
+- Background: `#0D1117` deep blue-black.
+- Surface: `#111827` / `#17212B` for panels and clip frames.
+- Foreground: `#E6EDF3` for primary text.
+- Muted: `#8B949E` for labels and secondary copy.
+- Primary accent: `#2AC1C1` cyan for runtime paths, technical highlights, and active states.
+- Contrast accent: `#F25C78` pink for secondary emphasis and selected architecture contrast.
+- Spark accent: `#FFD23F` amber, used sparingly for logo resonance and communication sparks.
 
 ## Typography
 
@@ -22,8 +23,8 @@ Dark technical launch film for a developer infrastructure project. The video sho
 
 ## Motion Rules
 
-- Grid-locked layouts, fast but controlled entrances.
-- Use horizontal path motion to reinforce bridging and routing.
+- Grid-locked layouts over a subtle cyber network background.
+- Use horizontal path motion and light sweeps to reinforce bridging and routing.
 - Use real clips as proof windows, not decorative backgrounds.
 - Transition with wipes and masks; avoid jump cuts.
 - Keep text short enough to read in a 25-30 second social video.
@@ -33,5 +34,6 @@ Dark technical launch film for a developer infrastructure project. The video sho
 - Do not imply OpenAgentIO replaces MCP, Matrix, SSE, or A2A.
 - Do not fake events, traces, services, or logs that are not in the recorded clips.
 - Do not use purple-blue AI gradients as the dominant visual.
+- Do not flood every component with neon; the design should read as a premium runtime network, not a gaming HUD.
 - Do not overload the frame with protocol diagrams; keep one chain visible at a time.
 - Do not call every runtime participant an Agent; use "participants" where accuracy matters.

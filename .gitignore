@@ -18,4 +18,7 @@ venv/
 *.log
 *.mp4
 *.gif
+*.wav
+*.mp3
 .hyperframes
+.waveform-cache

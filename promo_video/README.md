@@ -38,6 +38,20 @@ If your local HyperFrames CLI uses a project command, run the equivalent preview
 hyperframes render index.html --output openagentio-promo.mp4
 ```
 
+If the HyperFrames renderer drops nested preview videos or audio, use the
+post-process render path. It first renders the HyperFrames animation, then
+overlays the recorded demo videos and music with ffmpeg:
+
+```bash
+bash render_with_media.sh
+```
+
+Output:
+
+```text
+openagentio-promo-final.mp4
+```
+
 Recommended export:
 
 - 1920x1080
