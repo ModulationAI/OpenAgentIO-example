@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OpenAgentIO Promo</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #111827;
+      --surface-2: #17212b;
+      --fg: #e6edf3;
+      --muted: #8b949e;
+      --accent: #2ac1c1;
+      --pink: #f25c78;
+      --amber: #ffd23f;
+      --line: rgba(230, 237, 243, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: Inter, Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    [data-composition-id="openagentio-promo"] {
+      position: relative;
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      background:
+        linear-gradient(115deg, rgba(42, 193, 193, 0.08), transparent 34%),
+        linear-gradient(245deg, rgba(242, 92, 120, 0.06), transparent 38%),
+        linear-gradient(135deg, #0d1117 0%, #0f1720 50%, #080b10 100%);
+    }
+
+    .grid {
+      position: absolute;
+      inset: 0;
+      opacity: 0.32;
+      background-image:
+        linear-gradient(rgba(42, 193, 193, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(42, 193, 193, 0.07) 1px, transparent 1px),
+        linear-gradient(135deg, transparent 0 48%, rgba(242, 92, 120, 0.06) 49% 51%, transparent 52% 100%);
+      background-size: 80px 80px;
+      z-index: 0;
+    }
+
+    .scan {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(180deg, transparent, rgba(42, 193, 193, 0.12), transparent);
+      height: 220px;
+      z-index: 1;
+      opacity: 0.65;
+    }
+
+    .scene {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      padding: 86px 104px;
+      gap: 36px;
+    }
+
+    .scene:not(.scene-1) {
+      opacity: 0;
+    }
+
+    .label {
+      color: var(--accent);
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+
+    .headline {
+      margin: 0;
+      max-width: 1400px;
+      font-size: 104px;
+      line-height: 0.95;
+      font-weight: 850;
+      letter-spacing: 0;
+    }
+
+    .s1-title {
+      line-height: 1.06;
+    }
+
+    .subhead {
+      max-width: 1180px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 34px;
+      line-height: 1.35;
+      font-weight: 450;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .mark {
+      width: 62px;
+      height: 62px;
+      border: 1px solid rgba(255, 210, 63, 0.48);
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      box-shadow: 0 0 42px rgba(255, 210, 63, 0.22);
+      overflow: hidden;
+      background: rgba(255, 210, 63, 0.08);
+    }
+
+    .mark img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .brand {
+      font-size: 32px;
+      font-weight: 800;
+    }
+
+    .hook-layout {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 42px;
+    }
+
+    .proof-strip {
+      display: flex;
+      gap: 18px;
+      margin-top: 18px;
+    }
+
+    .proof-pill {
+      border: 1px solid var(--line);
+      background: rgba(17, 24, 39, 0.74);
+      padding: 18px 24px;
+      font-size: 24px;
+      color: var(--fg);
+      border-radius: 8px;
+    }
+
+    .cn-subtitle {
+      max-width: 1540px;
+      margin: 0;
+      color: rgba(230, 237, 243, 0.82);
+      font-family: Inter, Arial, sans-serif;
+      font-size: 25px;
+      line-height: 1.45;
+      font-weight: 520;
+    }
+
+    .scene-bottom-cn {
+      width: 100%;
+      max-width: none;
+      margin-top: 2px;
+      padding: 18px 24px;
+      border-top: 1px solid rgba(230, 237, 243, 0.10);
+      background: rgba(13, 17, 23, 0.48);
+      text-align: center;
+      font-size: 25px;
+      line-height: 1.4;
+    }
+
+    .problem-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 42px;
+      height: auto;
+      align-items: center;
+    }
+
+    .scene-2 {
+      justify-content: center;
+      gap: 34px;
+    }
+
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .protocol-box {
+      min-height: 104px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 28px;
+      border: 1px solid var(--line);
+      background: rgba(17, 24, 39, 0.72);
+      border-radius: 8px;
+      font-size: 28px;
+      font-weight: 760;
+    }
+
+    .protocol-box span {
+      color: var(--muted);
+      font-size: 19px;
+      font-weight: 520;
+    }
+
+    .arrow-lane {
+      position: relative;
+      height: 10px;
+      background: rgba(230, 237, 243, 0.10);
+      overflow: hidden;
+      border-radius: 999px;
+    }
+
+    .arrow-lane::after {
+      content: "";
+      position: absolute;
+      width: 34%;
+      height: 100%;
+      left: -35%;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      border-radius: 999px;
+    }
+
+    .capability-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      width: 100%;
+    }
+
+    .capability-tile {
+      min-height: 108px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 20px 22px;
+      border: 1px solid rgba(42, 193, 193, 0.24);
+      background: rgba(17, 24, 39, 0.76);
+      border-radius: 8px;
+      box-shadow: 0 18px 46px rgba(0, 0, 0, 0.18);
+    }
+
+    .capability-tile strong {
+      color: var(--fg);
+      font-size: 25px;
+      line-height: 1.12;
+      font-weight: 780;
+    }
+
+    .capability-tile span {
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.24;
+      font-weight: 520;
+    }
+
+    .clip-scene {
+      justify-content: center;
+    }
+
+    .clip-layout {
+      display: grid;
+      grid-template-columns: 1.18fr 0.82fr;
+      gap: 34px;
+      align-items: stretch;
+      height: 100%;
+    }
+
+    .clip-frame {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(230, 237, 243, 0.20);
+      background: var(--surface);
+      border-radius: 10px;
+      box-shadow: 0 28px 110px rgba(0, 0, 0, 0.42);
+    }
+
+    .clip-frame video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .clip-frame.chat video {
+      object-position: center;
+    }
+
+    .media-video {
+      position: absolute;
+      z-index: 3;
+      object-fit: cover;
+      display: block;
+      overflow: hidden;
+      border: 1px solid rgba(230, 237, 243, 0.20);
+      background: var(--surface);
+      border-radius: 10px;
+      box-shadow: 0 28px 110px rgba(0, 0, 0, 0.42);
+    }
+
+    .media-chat {
+      left: 104px;
+      top: 86px;
+      width: 990px;
+      height: 908px;
+    }
+
+    .media-trace {
+      left: 104px;
+      top: 86px;
+      width: 975px;
+      height: 908px;
+    }
+
+    .callout-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 26px;
+      padding: 42px;
+      border: 1px solid var(--line);
+      background: rgba(13, 17, 23, 0.86);
+      border-radius: 10px;
+    }
+
+    .callout {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      color: var(--fg);
+      font-size: 32px;
+      line-height: 1.2;
+      font-weight: 760;
+    }
+
+    .dot {
+      width: 16px;
+      height: 16px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 28px rgba(42, 193, 193, 0.48);
+    }
+
+    .chain-scene {
+      justify-content: center;
+      gap: 42px;
+    }
+
+    .chain {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+      align-items: center;
+    }
+
+    .node {
+      min-height: 170px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 16px;
+      padding: 28px;
+      border: 1px solid rgba(230, 237, 243, 0.17);
+      background: linear-gradient(180deg, rgba(23, 33, 43, 0.94), rgba(13, 17, 23, 0.94));
+      border-radius: 10px;
+    }
+
+    .node strong {
+      font-size: 36px;
+      line-height: 1.05;
+    }
+
+    .node small {
+      color: var(--muted);
+      font-size: 20px;
+      line-height: 1.25;
+    }
+
+    .chain-line {
+      height: 8px;
+      background: rgba(42, 193, 193, 0.18);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .chain-line .runner {
+      width: 28%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, var(--accent), var(--pink), var(--amber), transparent);
+      transform: translateX(-120%);
+    }
+
+    .ecosystem-rail {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+      padding-top: 8px;
+    }
+
+    .ecosystem-caption {
+      color: rgba(230, 237, 243, 0.54);
+      font-size: 22px;
+      line-height: 1.25;
+      font-weight: 560;
+    }
+
+    .ecosystem-line {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(9, minmax(0, 1fr));
+      gap: 12px;
+      align-items: center;
+      padding-top: 8px;
+    }
+
+    .ecosystem-line::before {
+      content: "";
+      position: absolute;
+      left: 48px;
+      right: 48px;
+      top: 28px;
+      height: 1px;
+      background: rgba(230, 237, 243, 0.20);
+      z-index: 0;
+    }
+
+    .ecosystem-item {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 10px 12px;
+      border: 1px solid rgba(42, 193, 193, 0.18);
+      border-radius: 999px;
+      background: rgba(17, 24, 39, 0.92);
+      min-width: 0;
+      color: rgba(230, 237, 243, 0.68);
+      font-size: 17px;
+      line-height: 1.12;
+      font-weight: 650;
+      text-align: center;
+      box-shadow: 0 0 24px rgba(0, 0, 0, 0.18);
+    }
+
+    .trace-layout {
+      display: grid;
+      grid-template-columns: 1fr 0.72fr;
+      gap: 34px;
+      height: 100%;
+      align-items: stretch;
+    }
+
+    .trace-frame video {
+      object-position: center;
+    }
+
+    .metric {
+      border: 1px solid var(--line);
+      background: rgba(17, 24, 39, 0.76);
+      border-radius: 8px;
+      padding: 26px 30px;
+    }
+
+    .metric .value {
+      font-size: 54px;
+      font-weight: 850;
+      color: var(--accent);
+    }
+
+    .metric .caption {
+      color: var(--muted);
+      font-size: 22px;
+      line-height: 1.3;
+      margin-top: 8px;
+    }
+
+    .closing {
+      height: 100%;
+      justify-content: center;
+      align-items: center;
+      gap: 26px;
+      text-align: center;
+    }
+
+    .closing-logo-frame {
+      width: 260px;
+      height: 260px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 210, 63, 0.46);
+      border-radius: 22px;
+      background: rgba(17, 24, 39, 0.62);
+      box-shadow:
+        0 0 70px rgba(255, 210, 63, 0.22),
+        0 28px 90px rgba(0, 0, 0, 0.34);
+      overflow: hidden;
+      will-change: transform, box-shadow;
+    }
+
+    .closing-logo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .closing-title {
+      margin: 0;
+      color: var(--fg);
+      font-size: 74px;
+      line-height: 1;
+      font-weight: 860;
+      letter-spacing: 0;
+      text-shadow: 0 0 0 rgba(42, 193, 193, 0);
+      will-change: transform, text-shadow, color;
+    }
+
+    .closing-tagline {
+      margin: 0;
+      color: var(--muted);
+      font-size: 32px;
+      line-height: 1.2;
+      font-weight: 520;
+    }
+
+    .closing-url {
+      color: var(--accent);
+      font-size: 28px;
+      line-height: 1.2;
+      font-weight: 680;
+    }
+
+    .closing-sdk {
+      color: rgba(230, 237, 243, 0.78);
+      font-size: 28px;
+      line-height: 1.2;
+      font-weight: 620;
+    }
+
+    .closing-vision {
+      max-width: 1160px;
+      color: rgba(230, 237, 243, 0.84);
+      font-size: 30px;
+      line-height: 1.3;
+      font-weight: 560;
+    }
+
+    .dev-preview {
+      position: absolute;
+      right: 104px;
+      bottom: 72px;
+      color: var(--muted);
+      font-size: 22px;
+      z-index: 4;
+    }
+
+    .wipe {
+      position: absolute;
+      inset: 0;
+      z-index: 8;
+      background: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <div data-hf-id="hf-imzz" data-composition-id="openagentio-promo" data-start="0" data-duration="60" data-track-index="0" data-width="1920" data-height="1080">
+    <div data-hf-id="hf-kxq8" class="grid"></div>
+    <div data-hf-id="hf-az1f" class="scan"></div>
+
+    <section data-hf-id="hf-pu0y" class="scene scene-1">
+      <div data-hf-id="hf-e60g" class="hook-layout">
+        <div data-hf-id="hf-5xyk" class="brand-row s1-brand">
+          <div data-hf-id="hf-m0po" class="mark"><img data-hf-id="hf-qe0a" src="assets/logo.png" alt="OpenAgentIO logo"></div>
+          <div data-hf-id="hf-rfac" class="brand">OpenAgentIO</div>
+        </div>
+        <div data-hf-id="hf-yeow">
+          <div data-hf-id="hf-anxb" class="label s1-label">Agent runtime integration layer</div>
+          <h1 data-hf-id="hf-v09m" class="headline s1-title">Connect agents across runtimes, frameworks, and teams.</h1>
+        </div>
+        <p data-hf-id="hf-dji2" class="subhead s1-sub">Matrix events, MCP tools, SSE streams, and event-driven runtimes share one runtime contract.</p>
+        <div data-hf-id="hf-6uh3" class="proof-strip">
+          <div data-hf-id="hf-oazp" class="proof-pill s1-pill">One Conversation</div>
+          <div data-hf-id="hf-48q4" class="proof-pill s1-pill">Multiple participants</div>
+          <div data-hf-id="hf-xiij" class="proof-pill s1-pill">One trace</div>
+        </div>
+        <p data-hf-id="hf-3i6o" class="cn-subtitle s1-cn">将所有不同的 AI 智能体连接在一起共同协作。OpenAgentIO 将 MCP、Matrix、OpenAI 协议、SSE 流式响应以及事件驱动智能体连接到同一条通信链路中，实现统一消息模型、上下文传递与链路追踪。</p>
+      </div>
+    </section>
+
+    <section data-hf-id="hf-job5" class="scene scene-2">
+      <div data-hf-id="hf-l2zm" class="problem-grid">
+        <div data-hf-id="hf-y7yw">
+          <div data-hf-id="hf-313u" class="label s2-label">The real problem</div>
+          <h2 data-hf-id="hf-qh4j" class="headline s2-title">Modern agent systems are not one runtime.</h2>
+          <p data-hf-id="hf-1ch6" class="subhead s2-sub">They are distributed conversations that cross runtimes, tools, streams, and event networks.</p>
+        </div>
+        <div data-hf-id="hf-d1zs" class="stack">
+          <div data-hf-id="hf-tsly" class="protocol-box s2-box">Matrix <span data-hf-id="hf-d6an">room events</span></div>
+          <div data-hf-id="hf-lkv4" class="arrow-lane s2-lane"></div>
+          <div data-hf-id="hf-2ln5" class="protocol-box s2-box">MCP <span data-hf-id="hf-lcbu">tool calls</span></div>
+          <div data-hf-id="hf-whjs" class="arrow-lane s2-lane"></div>
+          <div data-hf-id="hf-n4v8" class="protocol-box s2-box">SSE <span data-hf-id="hf-i4ec">streaming output</span></div>
+        </div>
+      </div>
+      <div data-hf-id="hf-9zt3" class="capability-strip">
+        <div data-hf-id="hf-545n" class="capability-tile s2-tile"><strong data-hf-id="hf-ucpu">Request-Reply</strong><span data-hf-id="hf-49ys">Synchronous Invocation</span></div>
+        <div data-hf-id="hf-diuj" class="capability-tile s2-tile"><strong data-hf-id="hf-wii6">Streaming</strong><span data-hf-id="hf-vjha">Streaming Response</span></div>
+        <div data-hf-id="hf-d4ji" class="capability-tile s2-tile"><strong data-hf-id="hf-5bs0">Pub/Sub</strong><span data-hf-id="hf-k3u0">Event-Driven Messaging</span></div>
+        <div data-hf-id="hf-cq8h" class="capability-tile s2-tile"><strong data-hf-id="hf-ediv">Parallel Execution</strong><span data-hf-id="hf-b2fs">Parallel Invocation</span></div>
+        <div data-hf-id="hf-cbxg" class="capability-tile s2-tile"><strong data-hf-id="hf-m7ql">Agent Handoff</strong><span data-hf-id="hf-pw6j">Context Transfer</span></div>
+        <div data-hf-id="hf-bxmf" class="capability-tile s2-tile"><strong data-hf-id="hf-fc2v">Async Task</strong><span data-hf-id="hf-8wjd">Asynchronous Task Processing</span></div>
+        <div data-hf-id="hf-bjbe" class="capability-tile s2-tile"><strong data-hf-id="hf-mpbw">Browser/WebAPP Integration</strong><span data-hf-id="hf-mk9h">HTTP + SSE Streaming</span></div>
+        <div data-hf-id="hf-b50d" class="capability-tile s2-tile"><strong data-hf-id="hf-aeb6">Remote Capability Calling</strong><span data-hf-id="hf-j9t2">Agent-to-Agent Function Invocation</span></div>
+      </div>
+      <p data-hf-id="hf-qx4d" class="cn-subtitle scene-bottom-cn s2-cn">未来的超级智能体 / 企业内部，必然建立在多个智能体的协作之上。它们来自不同协议、不同框架、不同团队，却需要完成同一个目标。</p>
+    </section>
+
+    <section data-hf-id="hf-5bgd" class="scene scene-3 clip-scene">
+      <div data-hf-id="hf-klq1" class="clip-layout">
+        <div data-hf-id="hf-ee7h" class="clip-frame chat s3-clip">
+          <video data-hf-id="hf-wa37" data-start="8.06" data-duration="20.44" data-track-index="12" src="assets/matrix_mcp_chat.mp4" muted playsinline preload="auto"></video>
+        </div>
+        <div data-hf-id="hf-pc6c" class="callout-panel s3-panel">
+          <div data-hf-id="hf-azqn" class="label">Live demo</div>
+          <div data-hf-id="hf-zjsx" class="callout s3-callout"><span data-hf-id="hf-9gry" class="dot"></span><span data-hf-id="hf-a76j">Matrix message enters the Bus.</span></div>
+          <div data-hf-id="hf-pmhh" class="callout s3-callout"><span data-hf-id="hf-zcc2" class="dot"></span><span data-hf-id="hf-ymhe">Router calls MCP repo tools.</span></div>
+          <div data-hf-id="hf-qtek" class="callout s3-callout"><span data-hf-id="hf-zqn3" class="dot"></span><span data-hf-id="hf-5l4n">SSE reviewer streams a release verdict.</span></div>
+          <p data-hf-id="hf-hxhr" class="subhead">The chat window is the interface. OpenAgentIO keeps heterogeneous agents, tools, and runtimes connected underneath.</p>
+          <p data-hf-id="hf-dg5m" class="cn-subtitle s3-cn">一次对话的背后，OpenAgentIO 将来自不同网络、不同智能体和不同系统的参与者连接在一起。</p>
+        </div>
+      </div>
+    </section>
+
+    <section data-hf-id="hf-5ac3" class="scene scene-4 chain-scene">
+      <div data-hf-id="hf-x11t">
+        <div data-hf-id="hf-n75n" class="label s4-label">Normalized through OpenAgentIO</div>
+        <h2 data-hf-id="hf-twwl" class="headline s4-title">Matrix -&gt; OpenAgentIO -&gt; MCP -&gt; SSE</h2>
+      </div>
+      <div data-hf-id="hf-i9yj" class="chain">
+        <div data-hf-id="hf-9fju" class="node s4-node"><strong data-hf-id="hf-cjxj">Matrix</strong><small data-hf-id="hf-tv38">Inbound room event</small></div>
+        <div data-hf-id="hf-uhem" class="node s4-node"><strong data-hf-id="hf-dcov">OpenAgentIO</strong><small data-hf-id="hf-7fbe">Publish, invoke, stream, session, trace</small></div>
+        <div data-hf-id="hf-uvpn" class="node s4-node"><strong data-hf-id="hf-a4na">MCP</strong><small data-hf-id="hf-5vwt">Repository tools as invoke targets</small></div>
+        <div data-hf-id="hf-va0o" class="node s4-node"><strong data-hf-id="hf-e55z">SSE</strong><small data-hf-id="hf-e8yy">Streaming reviewer as an agent output</small></div>
+      </div>
+      <div data-hf-id="hf-m06m" class="chain-line s4-line"><div data-hf-id="hf-k5ge" class="runner"></div></div>
+      <div data-hf-id="hf-wllp" class="ecosystem-rail">
+        <div data-hf-id="hf-gptp" class="ecosystem-caption s4-eco-caption">A low-level runtime path for apps, social tools, internal systems, and agent frameworks.</div>
+        <div data-hf-id="hf-7y73" class="ecosystem-line">
+          <div data-hf-id="hf-j3n5" class="ecosystem-item s4-eco">Web App</div>
+          <div data-hf-id="hf-w205" class="ecosystem-item s4-eco">Social Tools</div>
+          <div data-hf-id="hf-x8x8" class="ecosystem-item s4-eco">Internal Systems</div>
+          <div data-hf-id="hf-wum7" class="ecosystem-item s4-eco">Hermes</div>
+          <div data-hf-id="hf-y1ja" class="ecosystem-item s4-eco">OpenClaw</div>
+          <div data-hf-id="hf-xn89" class="ecosystem-item s4-eco">OpenCode</div>
+          <div data-hf-id="hf-yu5c" class="ecosystem-item s4-eco">HiClaw</div>
+          <div data-hf-id="hf-yfub" class="ecosystem-item s4-eco">QwenPaw</div>
+          <div data-hf-id="hf-t9uy" class="ecosystem-item s4-eco">More</div>
+        </div>
+        <p data-hf-id="hf-9h5s" class="cn-subtitle scene-bottom-cn s4-cn">诸如从 OpenClaw、Hermes、OpenCode，到企业系统、钉钉、飞书、Telegram 和 Web App，OpenAgentIO 让它们共享同一个协作运行时。</p>
+      </div>
+    </section>
+
+    <section data-hf-id="hf-hy53" class="scene scene-5 clip-scene">
+      <div data-hf-id="hf-gu1a" class="trace-layout">
+        <div data-hf-id="hf-y32e" class="clip-frame trace-frame s5-clip">
+          <video data-hf-id="hf-jt2v" data-start="35.06" data-duration="21.27" data-track-index="13" src="assets/observability.mp4" muted playsinline preload="auto"></video>
+        </div>
+        <div data-hf-id="hf-qsp2" class="callout-panel s5-panel">
+          <div data-hf-id="hf-zh3x" class="label">Observability proof</div>
+          <div data-hf-id="hf-3ae1" class="metric s5-metric">
+            <div data-hf-id="hf-3u07" class="value">One Trace</div>
+            <div data-hf-id="hf-jims" class="caption">End-to-end visibility across the runtime.</div>
+          </div>
+          <div data-hf-id="hf-r8z1" class="metric s5-metric">
+            <div data-hf-id="hf-3hum" class="value">One Session</div>
+            <div data-hf-id="hf-oacs" class="caption">Shared context across agents.</div>
+          </div>
+          <p data-hf-id="hf-m98c" class="cn-subtitle s5-cn">上下文在多个智能体之间持续传递，并且完整追踪一次对话背后它们的协作过程。</p>
+        </div>
+      </div>
+    </section>
+
+    <section data-hf-id="hf-u4n0" class="scene scene-6 closing">
+      <div data-hf-id="hf-dqum" class="closing-logo-frame s6-logo"><img data-hf-id="hf-txym" src="assets/logo.png" alt="OpenAgentIO logo"></div>
+      <h2 data-hf-id="hf-9555" class="closing-title s6-title">OpenAgentIO</h2>
+      <p data-hf-id="hf-1h3n" class="closing-tagline s6-line">Conversation-Aware Runtime Bus for Distributed AI Agents</p>
+      <div data-hf-id="hf-iq53" class="closing-url s6-line">https://github.com/ModulationAI/openagentio</div>
+      <div data-hf-id="hf-pd5h" class="closing-sdk s6-line">Go / Python / TypeScript SDK</div>
+      <div data-hf-id="hf-9fl3" class="closing-vision s6-line">Coming soon: connect every agent through natural language and conversation.</div>
+    </section>
+
+    <div data-hf-id="hf-5ruk" class="dev-preview">v0.3-alpha developer preview</div>
+    <div data-hf-id="hf-vekh" class="wipe"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script>
+      window.__timelines = window.__timelines || {};
+
+      const tl = gsap.timeline({ paused: true });
+
+      tl.set(".scan", { y: -240 }, 0);
+      tl.set(".wipe", { x: "-102%" }, 0);
+      tl.to(".scan", { y: 1120, duration: 8, ease: "none", repeat: 7 }, 0);
+
+      tl.from(".s1-brand", { y: 28, opacity: 0, duration: 0.45, ease: "power3.out" }, 0.15);
+      tl.from(".s1-label", { y: 24, opacity: 0, duration: 0.45, ease: "power3.out" }, 0.35);
+      tl.from(".s1-title", { y: 58, opacity: 0, duration: 0.68, ease: "power4.out" }, 0.50);
+      tl.from(".s1-sub", { y: 38, opacity: 0, duration: 0.50, ease: "power3.out" }, 0.88);
+      tl.from(".s1-pill", { y: 26, opacity: 0, duration: 0.42, stagger: 0.10, ease: "power3.out" }, 1.10);
+      tl.from(".s1-cn", { y: 22, opacity: 0, duration: 0.48, ease: "power3.out" }, 1.46);
+
+      tl.to(".wipe", { x: "0%", duration: 0.36, ease: "power4.in" }, 3.70);
+      tl.set(".scene-1", { opacity: 0 }, 4.06);
+      tl.set(".scene-2", { opacity: 1 }, 4.06);
+      tl.to(".wipe", { x: "102%", duration: 0.42, ease: "power4.out" }, 4.06);
+      tl.set(".wipe", { x: "-102%" }, 4.50);
+      tl.from(".s2-label", { y: 22, opacity: 0, duration: 0.42, ease: "power3.out" }, 4.20);
+      tl.from(".s2-title", { y: 52, opacity: 0, duration: 0.58, ease: "power4.out" }, 4.34);
+      tl.from(".s2-sub", { y: 34, opacity: 0, duration: 0.46, ease: "power3.out" }, 4.74);
+      tl.from(".s2-cn", { y: 22, opacity: 0, duration: 0.42, ease: "power3.out" }, 5.08);
+      tl.from(".s2-box", { x: 52, opacity: 0, duration: 0.45, stagger: 0.13, ease: "power3.out" }, 4.50);
+      tl.from(".s2-lane", { scaleX: 0, transformOrigin: "left center", duration: 0.38, stagger: 0.12, ease: "power3.out" }, 4.88);
+      tl.from(".s2-tile", { y: 28, opacity: 0, duration: 0.38, stagger: 0.045, ease: "power3.out" }, 5.52);
+
+      tl.to(".wipe", { x: "0%", duration: 0.36, ease: "power4.in" }, 7.70);
+      tl.set(".scene-2", { opacity: 0 }, 8.06);
+      tl.set(".scene-3", { opacity: 1 }, 8.06);
+      tl.to(".wipe", { x: "102%", duration: 0.42, ease: "power4.out" }, 8.06);
+      tl.set(".wipe", { x: "-102%" }, 8.50);
+      tl.from(".s3-clip", { x: -70, opacity: 0, scale: 0.97, duration: 0.62, ease: "power4.out" }, 8.18);
+      tl.from(".s3-panel", { x: 50, opacity: 0, duration: 0.56, ease: "power3.out" }, 8.34);
+      tl.from(".s3-callout", { y: 28, opacity: 0, duration: 0.42, stagger: 0.18, ease: "power3.out" }, 8.70);
+      tl.from(".s3-cn", { y: 22, opacity: 0, duration: 0.42, ease: "power3.out" }, 9.28);
+
+      tl.to(".wipe", { x: "0%", duration: 0.36, ease: "power4.in" }, 28.70);
+      tl.set(".scene-3", { opacity: 0 }, 29.06);
+      tl.set(".scene-4", { opacity: 1 }, 29.06);
+      tl.to(".wipe", { x: "102%", duration: 0.42, ease: "power4.out" }, 29.06);
+      tl.set(".wipe", { x: "-102%" }, 29.50);
+      tl.from(".s4-label", { y: 22, opacity: 0, duration: 0.40, ease: "power3.out" }, 29.20);
+      tl.from(".s4-title", { y: 48, opacity: 0, duration: 0.54, ease: "power4.out" }, 29.34);
+      tl.from(".s4-node", { y: 44, opacity: 0, duration: 0.46, stagger: 0.12, ease: "power3.out" }, 29.78);
+      tl.from(".s4-line", { scaleX: 0, transformOrigin: "left center", duration: 0.46, ease: "power3.out" }, 30.38);
+      tl.to(".s4-line .runner", { x: "430%", duration: 1.9, ease: "power2.inOut" }, 30.56);
+      tl.from(".s4-eco-caption", { y: 18, opacity: 0, duration: 0.38, ease: "power3.out" }, 31.05);
+      tl.from(".s4-eco", { y: 20, opacity: 0, duration: 0.32, stagger: 0.055, ease: "power3.out" }, 31.24);
+      tl.from(".s4-cn", { y: 18, opacity: 0, duration: 0.40, ease: "power3.out" }, 31.82);
+
+      tl.to(".wipe", { x: "0%", duration: 0.36, ease: "power4.in" }, 34.70);
+      tl.set(".scene-4", { opacity: 0 }, 35.06);
+      tl.set(".scene-5", { opacity: 1 }, 35.06);
+      tl.to(".wipe", { x: "102%", duration: 0.42, ease: "power4.out" }, 35.06);
+      tl.set(".wipe", { x: "-102%" }, 35.50);
+      tl.from(".s5-clip", { x: -60, opacity: 0, scale: 0.98, duration: 0.60, ease: "power4.out" }, 35.20);
+      tl.from(".s5-panel", { x: 52, opacity: 0, duration: 0.52, ease: "power3.out" }, 35.36);
+      tl.from(".s5-metric", { y: 30, opacity: 0, duration: 0.42, stagger: 0.18, ease: "power3.out" }, 35.74);
+      tl.from(".s5-cn", { y: 22, opacity: 0, duration: 0.42, ease: "power3.out" }, 36.22);
+
+      tl.to(".wipe", { x: "0%", duration: 0.36, ease: "power4.in" }, 56.70);
+      tl.set(".scene-5", { opacity: 0 }, 57.06);
+      tl.set(".scene-6", { opacity: 1 }, 57.06);
+      tl.to(".wipe", { x: "102%", duration: 0.42, ease: "power4.out" }, 57.06);
+      tl.set(".wipe", { x: "-102%" }, 57.50);
+      tl.from(".s6-logo", { y: 28, opacity: 0, scale: 0.94, duration: 0.52, ease: "power3.out" }, 57.18);
+      tl.from(".s6-title", { y: 36, opacity: 0, duration: 0.52, ease: "power4.out" }, 57.42);
+      tl.from(".s6-line", { y: 24, opacity: 0, duration: 0.40, stagger: 0.12, ease: "power3.out" }, 57.72);
+      tl.to(".s6-logo", {
+        scale: 1.035,
+        boxShadow: "0 0 110px rgba(255, 210, 63, 0.46), 0 28px 90px rgba(0, 0, 0, 0.34)",
+        duration: 0.28,
+        repeat: 3,
+        yoyo: true,
+        ease: "sine.inOut"
+      }, 58.16);
+      tl.to(".s6-title", {
+        color: "#2ac1c1",
+        textShadow: "0 0 34px rgba(42, 193, 193, 0.58)",
+        duration: 0.28,
+        repeat: 3,
+        yoyo: true,
+        ease: "sine.inOut"
+      }, 58.16);
+
+      window.__timelines["openagentio-promo"] = tl;
+    </script>
+  </div>
+  <audio data-hf-id="hf-to1d" data-start="0" data-duration="31.20" data-track-index="20" src="assets/code_with_rhythm_cut.mp3" data-volume="0.42"></audio>
+  <audio data-hf-id="hf-f849" data-start="31.20" data-duration="28.80" data-track-index="20" src="assets/code_with_rhythm_cut.mp3" data-volume="0.42"></audio>
+</body>
+</html>
